@@ -1,0 +1,82 @@
+{
+  "_from": "@reactioncommerce/api-plugin-orders@1.4.5",
+  "_id": "@reactioncommerce/api-plugin-orders@1.4.5",
+  "_inBundle": false,
+  "_integrity": "sha512-MvlhD5LxK/EGWra1u4boBbgQsZJssZKrZs8yFywIOXaBOmhJjVyqtgX2SruGSPoszh1rI9V2nxWsMHOoZkbd4A==",
+  "_location": "/@reactioncommerce/api-plugin-orders",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "@reactioncommerce/api-plugin-orders@1.4.5",
+    "name": "@reactioncommerce/api-plugin-orders",
+    "escapedName": "@reactioncommerce%2fapi-plugin-orders",
+    "scope": "@reactioncommerce",
+    "rawSpec": "1.4.5",
+    "saveSpec": null,
+    "fetchSpec": "1.4.5"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/@reactioncommerce/api-plugin-orders/-/api-plugin-orders-1.4.5.tgz",
+  "_shasum": "7c76157fb3d87ccaefb5f5aeb7c39166c5d68160",
+  "_spec": "@reactioncommerce/api-plugin-orders@1.4.5",
+  "_where": "/home/awahab1116/check-intempco/reaction-cli",
+  "author": {
+    "name": "Reaction Commerce",
+    "email": "engineering@reactioncommerce.com",
+    "url": "https://reactioncommerce.com"
+  },
+  "bugs": {
+    "url": "https://github.com/reactioncommerce/reaction/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "@reactioncommerce/api-utils": "^1.16.5",
+    "@reactioncommerce/logger": "^1.1.4",
+    "@reactioncommerce/random": "^1.0.2",
+    "@reactioncommerce/reaction-error": "^1.0.1",
+    "accounting-js": "^1.1.1",
+    "lodash": "^4.17.21",
+    "simpl-schema": "^1.5.9"
+  },
+  "deprecated": false,
+  "description": "Orders plugin for the Reaction API",
+  "devDependencies": {
+    "@babel/core": "^7.7.7",
+    "@babel/preset-env": "^7.7.7",
+    "@reactioncommerce/api-plugin-catalogs": "^1.0.0",
+    "@reactioncommerce/api-plugin-shops": "^1.0.0",
+    "@reactioncommerce/babel-remove-es-create-require": "~1.0.0",
+    "@reactioncommerce/data-factory": "^1.0.1",
+    "babel-plugin-rewire-exports": "^2.0.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
+    "babel-plugin-transform-import-meta": "~1.0.0"
+  },
+  "email": "engineering@reactioncommerce.com",
+  "engines": {
+    "node": ">=14.18.1"
+  },
+  "homepage": "https://github.com/reactioncommerce/reaction",
+  "license": "GPL-3.0",
+  "main": "index.js",
+  "name": "@reactioncommerce/api-plugin-orders",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reactioncommerce/reaction.git",
+    "directory": "packages/api-plugin-orders"
+  },
+  "scripts": {
+    "test": "jest",
+    "test:file": "jest --no-cache --watch --coverage=false",
+    "test:watch": "jest --watch"
+  },
+  "sideEffects": false,
+  "type": "module",
+  "url": "https://github.com/reactioncommerce/reaction",
+  "version": "1.4.5"
+}
