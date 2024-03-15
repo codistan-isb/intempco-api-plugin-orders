@@ -16,6 +16,7 @@ import getDataForOrderEmail from "./util/getDataForOrderEmail.js";
  * @returns {undefined}
  */
 export default async function register(app) {
+  console.log("Custom plugin for Orders");
   await app.registerPlugin({
     label: "Orders",
     name: "orders",

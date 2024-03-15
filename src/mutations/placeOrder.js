@@ -132,7 +132,7 @@ async function createPayments({
 export default async function placeOrder(context, input) {
   const cleanedInput = inputSchema.clean(input); // add default values and such
   inputSchema.validate(cleanedInput);
-
+  console.log("input", input);
   const { order: orderInput, payments: paymentsInput } = cleanedInput;
   const {
     billingAddress,
@@ -143,6 +143,7 @@ export default async function placeOrder(context, input) {
     fulfillmentGroups,
     ordererPreferredLanguage,
     shopId,
+    isStock,
   } = orderInput;
   const { accountId, appEvents, collections, getFunctionsOfType, userId } =
     context;
@@ -230,6 +231,7 @@ export default async function placeOrder(context, input) {
     paymentsInput,
     shippingAddress: shippingAddressForPayments,
     shop,
+    isStock,
   });
 
   // Create anonymousAccessToken if no account ID
@@ -260,6 +262,7 @@ export default async function placeOrder(context, input) {
       status: "new",
       workflow: ["new"],
     },
+    isStock,
   };
 
   if (fullToken) {
