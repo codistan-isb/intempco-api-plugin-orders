@@ -1,6 +1,6 @@
 {
-  "_from": "@reactioncommerce/api-plugin-orders@1.4.5",
-  "_id": "@reactioncommerce/api-plugin-orders@1.4.5",
+  "_from": "@reactioncommerce/api-plugin-orders@1.4.7",
+  "_id": "@reactioncommerce/api-plugin-orders@1.4.7",
   "_inBundle": false,
   "_integrity": "sha512-MvlhD5LxK/EGWra1u4boBbgQsZJssZKrZs8yFywIOXaBOmhJjVyqtgX2SruGSPoszh1rI9V2nxWsMHOoZkbd4A==",
   "_location": "/@reactioncommerce/api-plugin-orders",
@@ -8,7 +8,7 @@
   "_requested": {
     "type": "version",
     "registry": true,
-    "raw": "@reactioncommerce/api-plugin-orders@1.4.5",
+    "raw": "@reactioncommerce/api-plugin-orders@1.4.7",
     "name": "@reactioncommerce/api-plugin-orders",
     "escapedName": "@reactioncommerce%2fapi-plugin-orders",
     "scope": "@reactioncommerce",
@@ -21,7 +21,7 @@
   ],
   "_resolved": "https://registry.npmjs.org/@reactioncommerce/api-plugin-orders/-/api-plugin-orders-1.4.5.tgz",
   "_shasum": "7c76157fb3d87ccaefb5f5aeb7c39166c5d68160",
-  "_spec": "@reactioncommerce/api-plugin-orders@1.4.5",
+  "_spec": "@reactioncommerce/api-plugin-orders@1.4.7",
   "_where": "/home/awahab1116/check-intempco/reaction-cli",
   "author": {
     "name": "Reaction Commerce",
@@ -78,5 +78,5 @@
   "sideEffects": false,
   "type": "module",
   "url": "https://github.com/reactioncommerce/reaction",
-  "version": "1.4.5"
+  "version": "1.4.7"
 }

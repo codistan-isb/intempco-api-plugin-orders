@@ -187,6 +187,10 @@ extend type Mutation {
     "Mutation input"
     input: UpdateOrderFulfillmentGroupInput!
   ): UpdateOrderFulfillmentGroupPayload!
+
+
+
+  # orderConfirmation(input:)
 }
 
 "Allowed values for the `OrderFulfillmentGroupItems` sortBy parameter"

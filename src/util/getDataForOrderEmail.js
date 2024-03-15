@@ -43,7 +43,7 @@ export default async function getDataForOrderEmailDefault(context, { order }) {
     account = await Accounts.findOne({ _id: order.accountId });
   }
 
-  // TODO need to make this fully support multiple fulfillment groups. Now it's just collapsing into one
+  // TODO need to make this fully support multiple  fulfillment groups. Now it's just collapsing into one
   const amount = order.shipping.reduce((sum, group) => sum + group.invoice.total, 0);
   const discounts = order.shipping.reduce((sum, group) => sum + group.invoice.discounts, 0);
   const subtotal = order.shipping.reduce((sum, group) => sum + group.invoice.subtotal, 0);
