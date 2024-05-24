@@ -20,6 +20,10 @@ const inputSchema = new SimpleSchema({
     optional: true,
   },
   "payments.$": paymentInputSchema,
+  // isStock: {
+  //   type: Boolean,
+  //   optional: true, // Adjust according to whether it's required or not
+  // }
 });
 
 /**
@@ -46,6 +50,7 @@ async function createPayments({
   shippingAddress,
   shop,
 }) {
+  console.log("paymentsInput ", paymentsInput);
   // Determining which payment methods are enabled for the shop
   const availablePaymentMethods = shop.availablePaymentMethods || [];
 
@@ -95,6 +100,11 @@ async function createPayments({
       }
     );
 
+    if (!payment.intent) {
+      Logger.error("Payment intent is missing", payment);
+      throw new ReactionError("payment-failed", "Payment intent was not returned");
+    }
+
     const paymentWithCurrency = {
       ...payment,
       // This is from previous support for exchange rates, which was removed in v3.0.0
@@ -143,7 +153,6 @@ export default async function placeOrder(context, input) {
     fulfillmentGroups,
     ordererPreferredLanguage,
     shopId,
-    isStock,
   } = orderInput;
   const { accountId, appEvents, collections, getFunctionsOfType, userId } =
     context;
@@ -231,8 +240,10 @@ export default async function placeOrder(context, input) {
     paymentsInput,
     shippingAddress: shippingAddressForPayments,
     shop,
-    isStock,
+    // isStock,
   });
+
+  console.log("PAYMENT ORDER", payments);
 
   // Create anonymousAccessToken if no account ID
   const fullToken = accountId ? null : getAnonymousAccessToken();
@@ -262,8 +273,10 @@ export default async function placeOrder(context, input) {
       status: "new",
       workflow: ["new"],
     },
-    isStock,
+    // isStock,
   };
+
+  console.log("ORDER IN PLCAEORDER", order);
 
   if (fullToken) {
     const dbToken = { ...fullToken };

@@ -494,10 +494,10 @@ export const orderInputSchema = new SimpleSchema({
     optional: true,
   },
   shopId: String,
-  isStock: {
-    label: "This is a isStock ",
-    type: Boolean,
-  },
+  // isStock: {
+  //   label: "This is a isStock ",
+  //   type: Boolean,
+  // },
 });
 
 export const paymentInputSchema = new SimpleSchema({

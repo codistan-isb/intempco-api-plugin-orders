@@ -743,7 +743,7 @@ input OrderInput {
   """
   shopId: String!
 
-  isStock: Boolean
+  # isStock: Boolean
 }
 
 "Input for adding order payments"
@@ -840,7 +840,7 @@ input PlaceOrderInput {
   """
   payments: [PaymentInput]
 
-  isStock: Boolean
+  # isStock: Boolean
 }
 
 "Input for the moveOrderItems mutation"

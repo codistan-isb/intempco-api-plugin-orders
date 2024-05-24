@@ -15,6 +15,9 @@ import getDataForOrderEmail from "./util/getDataForOrderEmail.js";
  * @param {ReactionAPI} app The ReactionAPI instance
  * @returns {undefined}
  */
+
+console.log("ORDER PLUGIN");
+
 export default async function register(app) {
   console.log("Custom plugin for Orders");
   await app.registerPlugin({
