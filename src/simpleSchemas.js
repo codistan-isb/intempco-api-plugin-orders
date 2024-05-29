@@ -1179,6 +1179,10 @@ export const Order = new SimpleSchema({
     optional: true,
     defaultValue: {},
   },
+  isStock: {
+    label: "This is a isStock ",
+    type: Boolean,
+  },
 });
 
 /**
