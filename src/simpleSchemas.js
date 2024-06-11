@@ -1195,3 +1195,38 @@ export function extendOrdersSchemas(schemas) {
     },
   });
 }
+
+
+/**
+ * @name RFQProduct
+ * @memberof Schemas
+ * @type {SimpleSchema}
+ * @property {String} status required
+ * @property {Date} createdAt required
+ * @property {Date} updatedAt required
+ */
+export const RFQProductInputSchema = new SimpleSchema({
+
+  customization: {
+    type: Object,
+    optional: false
+  },
+  prodId: {
+    type: String,
+    optional: false
+  },
+  variantId: {
+    type: String,
+    optional: false
+  },
+  modelNumber: {
+    type: String,
+    optional: false
+  },
+  status: {
+    type: String,
+    allowedValues: ["pending", "approved", "rejected"],
+    defaultValue: "pending",
+    optional: true
+  }
+});

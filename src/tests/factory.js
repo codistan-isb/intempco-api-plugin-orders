@@ -20,6 +20,7 @@ import {
   OrderInvoice,
   OrderItem,
   orderItemInputSchema,
+  RFQProduct,
   Payment
 } from "../simpleSchemas.js";
 
@@ -38,6 +39,7 @@ const schemasToAddToFactory = {
   OrderItem,
   orderItemInputSchema,
   Payment,
+  RFQProduct,
   Shop
 };
 
