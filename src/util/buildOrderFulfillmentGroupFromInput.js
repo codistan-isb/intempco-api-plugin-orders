@@ -30,6 +30,9 @@ export default async function buildOrderFulfillmentGroupFromInput(context, {
 }) {
   const { data, items, selectedFulfillmentMethodId, shopId, totalPrice: expectedGroupTotal, type } = inputGroup;
 
+
+  console.log("TOTAL PRICE IN BUILDORDER", inputGroup.totalPrice);
+
   const group = {
     _id: Random.id(),
     address: data ? data.shippingAddress : null,

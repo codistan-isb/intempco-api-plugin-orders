@@ -6,6 +6,8 @@ import placeOrder from "./placeOrder.js";
 import splitOrderItem from "./splitOrderItem.js";
 import updateOrder from "./updateOrder.js";
 import updateOrderFulfillmentGroup from "./updateOrderFulfillmentGroup.js";
+import createRFQProduct from './createRFQProduct.js';
+import updateRFQProduct from './updateRFQ.js';
 
 export default {
   addOrderFulfillmentGroup,
@@ -15,5 +17,7 @@ export default {
   placeOrder,
   splitOrderItem,
   updateOrder,
-  updateOrderFulfillmentGroup
+  updateOrderFulfillmentGroup,
+  createRFQProduct,
+  updateRFQProduct
 };

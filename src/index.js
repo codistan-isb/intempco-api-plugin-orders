@@ -6,7 +6,7 @@ import preStartup from "./preStartup.js";
 import queries from "./queries/index.js";
 import resolvers from "./resolvers/index.js";
 import schemas from "./schemas/index.js";
-import { Order, OrderFulfillmentGroup, OrderItem } from "./simpleSchemas.js";
+import { Order, OrderFulfillmentGroup, OrderItem, RFQProductInputSchema } from "./simpleSchemas.js";
 import startup from "./startup.js";
 import getDataForOrderEmail from "./util/getDataForOrderEmail.js";
 
@@ -40,6 +40,12 @@ export default async function register(app) {
           [{ "payments.address.phone": 1 }],
           [{ "workflow.status": 1 }, { name: "c2_workflow.status" }]
         ]
+      },
+      RFQProduct: {
+        name: "RFQProduct",
+        updatedAt: { type: Date, default: Date.now },
+        createdAt: { type: Date, default: Date.now },
+        schema: RFQProductInputSchema
       }
     },
     functionsByType: {
@@ -57,7 +63,8 @@ export default async function register(app) {
     simpleSchemas: {
       Order,
       OrderFulfillmentGroup,
-      OrderItem
+      OrderItem,
+      RFQProductInputSchema
     }
   });
 }

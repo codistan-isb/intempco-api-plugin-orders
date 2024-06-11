@@ -148,8 +148,8 @@ export default async function placeOrder(context, input) {
   const { accountId, appEvents, collections, getFunctionsOfType, userId } =
     context;
   const { Orders, Cart } = collections;
-
-  const shop = await context.queries.shopById(context, shopId);
+  console.log("asdasdasd", fulfillmentGroups && fulfillmentGroups[0] && fulfillmentGroups[0].shopId);
+  const shop = await context.queries.shopById(context, fulfillmentGroups && fulfillmentGroups[0] && fulfillmentGroups[0].shopId);
   if (!shop) throw new ReactionError("not-found", "Shop not found");
 
   if (!userId && !shop.allowGuestCheckout) {

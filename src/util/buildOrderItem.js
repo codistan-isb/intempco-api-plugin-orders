@@ -12,13 +12,21 @@ import ReactionError from "@reactioncommerce/reaction-error";
  */
 export default async function buildOrderItem(context, { currencyCode, inputItem, cart }) {
   const { queries } = context;
+
+
+  console.log("QUERIES IN THE BUILD ORDER ITAM ", queries);
   const {
     addedAt,
     price,
     productConfiguration,
     quantity
   } = inputItem;
+
+  console.log("Building order item PRICE", inputItem.price);
   const { productId, productVariantId } = productConfiguration;
+
+  console.log("PRODUCT ID", productId);
+  console.log("PRODUCT VARIANT ID", productVariantId);
 
   const {
     catalogProduct: chosenProduct,
@@ -26,8 +34,25 @@ export default async function buildOrderItem(context, { currencyCode, inputItem,
     variant: chosenVariant
   } = await queries.findProductAndVariant(context, productId, productVariantId);
 
+  console.log("CHOSEN VARIANT ID====", chosenVariant.pricing.USD.price);
+
+  console.log("CHOSEN VARIANT PRICING====", chosenVariant.pricing);
+
   const variantPriceInfo = await queries.getVariantPrice(context, chosenVariant, currencyCode);
+
+  console.log("Variant price info", variantPriceInfo);
   const finalPrice = (variantPriceInfo || {}).price;
+
+  // const finalPrice = chosenVariant.pricing.USD?.price;
+
+  // // Log the extracted price
+  // console.log(`Extracted price for ${currencyCode}:`, finalPrice);
+
+
+  // console.log("Final price info", finalPrice);
+
+
+  console.log("Final price info", finalPrice);
 
   // Handle null or undefined price returned. Don't allow sale.
   if (!finalPrice && finalPrice !== 0) {

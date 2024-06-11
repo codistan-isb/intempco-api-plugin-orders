@@ -112,6 +112,10 @@ extend type Query {
     "A valid anonymous access token for this order. Required if the order is not linked with an account."
     token: String
   ): [Refund]
+
+  getAllRFQ(shopId: ID, accountId: ID, status: RFQProductStatus): [RFQProduct]
+
+  getRFQById(_id: ID!): getRFQById
 }
 
 extend type Mutation {
@@ -148,6 +152,10 @@ extend type Mutation {
     "Mutation input"
     input: MoveOrderItemsInput!
   ): MoveOrderItemsPayload!
+
+  createRFQProduct(input: RFQProductInput!): RFQProduct
+
+  updateRFQProduct(input: UpdateRFQProductInput!): UpdatedRFQProduct
 
   """
   Use this mutation to place an order, providing information necessary to pay for it.
@@ -744,6 +752,69 @@ input OrderInput {
   shopId: String!
 
   isStock: Boolean
+}
+
+enum RFQProductStatus {
+  pending
+  approved
+  rejected
+}
+
+input RFQProductInput {
+  variantId: String
+  prodId: String
+  status: RFQProductStatus = pending
+  modelNumber: String
+  customization: JSON!
+}
+
+input UpdateRFQProductInput {
+  _id: ID!
+  status: RFQProductStatus
+}
+
+type RFQProduct {
+  _id: ID!
+  prodId: String
+  variantId: String
+  status: RFQProductStatus!
+  userId: String
+  customization: JSON!
+  modelNumber: String
+  user: user
+  product: product
+  createdAt: Date!
+  updatedAt: Date!
+}
+
+type product {
+  title: String
+}
+
+type email {
+  address: String
+  verified: Boolean
+}
+
+type user {
+  _id: ID!
+  username: String!
+  firstName: String
+  lastName: String
+  emails: [email]
+  # Add other fields as needed
+}
+
+type getRFQById {
+  status: String
+  message: String
+  getRFQById: RFQProduct
+}
+
+type UpdatedRFQProduct {
+  status: String
+  message: String
+  updatedRFQ: RFQProduct
 }
 
 "Input for adding order payments"
