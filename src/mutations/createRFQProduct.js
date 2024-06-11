@@ -1,6 +1,6 @@
 import Random from "@reactioncommerce/random";
 import ReactionError from "@reactioncommerce/reaction-error";
-import { decodeProductOpaqueId } from "../xforms/id.js";
+import { decodeProductOpaqueId, decodeShopOpaqueId } from "../xforms/id.js";
 
 
 export default async function createRFQProduct(context, input) {
@@ -11,14 +11,17 @@ export default async function createRFQProduct(context, input) {
     }
 
     const { RFQProduct } = collections;
-    const { status, variantId, prodId, customization, modelNumber } = input;
+    const { status, variantId, prodId, customization, modelNumber, shopId, price } = input;
     const decodeProdId = decodeProductOpaqueId(prodId);
+    const decodeShopId = decodeShopOpaqueId(shopId);
 
     const newRFQ = {
         _id: Random.id(),
         userId,
         // prodId,
         prodId: decodeProdId,
+        shopId: decodeShopId,
+        price,
         variantId,
         customization,
         status,

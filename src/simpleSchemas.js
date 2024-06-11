@@ -1227,6 +1227,19 @@ export const RFQProductInputSchema = new SimpleSchema({
     type: String,
     optional: false
   },
+  price: {
+    type: Object,
+    optional: false
+  },
+
+  "price.amount": {
+    type: Number,
+    optional: false
+  },
+  "price.currencyCode": {
+    type: String,
+    optional: false
+  },
   status: {
     type: String,
     allowedValues: ["pending", "approved", "rejected"],

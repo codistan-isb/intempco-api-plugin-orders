@@ -762,10 +762,17 @@ enum RFQProductStatus {
 
 input RFQProductInput {
   variantId: String
+  shopId: String
   prodId: String
+  price: PriceInput
   status: RFQProductStatus = pending
   modelNumber: String
   customization: JSON!
+}
+
+input PriceInput {
+  amount: Float
+  currencyCode: String
 }
 
 input UpdateRFQProductInput {
@@ -780,11 +787,18 @@ type RFQProduct {
   status: RFQProductStatus!
   userId: String
   customization: JSON!
+  shopId: String
+  price: Price
   modelNumber: String
   user: user
   product: product
   createdAt: Date!
   updatedAt: Date!
+}
+
+type Price {
+  amount: Float
+  currencyCode: String
 }
 
 type product {
