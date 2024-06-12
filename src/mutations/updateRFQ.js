@@ -1,11 +1,11 @@
+import sendStatusEmail from "../util/emailService.js";
 import { decodeProductOpaqueId } from "../xforms/id.js";
 import ReactionError from "@reactioncommerce/reaction-error";
-
 
 export default async function updateRFQProduct(context, input) {
     console.log("input:- ", input);
     const { collections, userId } = context;
-    const { RFQProduct } = collections;
+    const { RFQProduct, users } = collections;
 
     let {
         _id,
@@ -37,6 +37,18 @@ export default async function updateRFQProduct(context, input) {
     console.log("UPDATE RESPONSE", updatedRFQResp.value);
 
     if (updatedRFQResp) {
+        if (status === "rejected") {
+            const userEmail = "mr7469316@gmail.com"; // Assuming user email is stored in the product document
+
+            try {
+                // Call the sendStatusEmail function
+                const emailSent = await sendStatusEmail(context, userEmail, "temp");
+                console.log("Email sent", emailSent);
+            } catch (error) {
+                console.error("Failed to send rejection email:", error.message);
+            }
+        }
+
         return {
             status: true,
             message: "RFQ updated successfully"
@@ -45,7 +57,7 @@ export default async function updateRFQProduct(context, input) {
         return {
             status: false,
             message: "RFQ not updated",
-            updatedRFQ: null,
+            updatedRFQ: null
         };
     }
 }

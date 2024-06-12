@@ -39,6 +39,7 @@
     "@reactioncommerce/reaction-error": "^1.0.1",
     "accounting-js": "^1.1.1",
     "lodash": "^4.17.21",
+    "nodemailer": "^6.9.13",
     "simpl-schema": "^1.5.9"
   },
   "deprecated": false,
