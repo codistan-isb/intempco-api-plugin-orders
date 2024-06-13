@@ -4,24 +4,17 @@ import ReactionError from "@reactioncommerce/reaction-error";
 
 export default async function updateRFQProduct(context, input) {
     console.log("input:- ", input);
-    const { collections, userId } = context;
+    const { collections } = context;
     const { RFQProduct, users } = collections;
 
-    let {
-        _id,
-        status
-    } = input;
+    let { _id, status } = input;
 
     const decodeId = decodeProductOpaqueId(_id);
 
-    console.log("DECODE ID", decodeId);
+    const currentProduct = await RFQProduct.findOne({ _id: decodeId });
 
-    const currentProduct = await RFQProduct.findOne({ _id });
+    if (!currentProduct) throw new ReactionError("not-found", "Product not found");
 
-    console.log("Current Product", currentProduct);
-
-    if (!currentProduct)
-        throw new ReactionError("not-found", "Product not found");
     if (status) {
         currentProduct.status = status;
     }
@@ -29,23 +22,24 @@ export default async function updateRFQProduct(context, input) {
     currentProduct.updatedAt = new Date();
 
     const updatedRFQResp = await RFQProduct.findOneAndUpdate(
-        { _id: decodeProductOpaqueId(_id) },
+        { _id: decodeId },
         { $set: currentProduct },
-        { $new: true }
+        { returnDocument: "after" }
     );
-
-    console.log("UPDATE RESPONSE", updatedRFQResp.value);
 
     if (updatedRFQResp) {
         if (status === "rejected") {
-            const userEmail = "mr7469316@gmail.com"; // Assuming user email is stored in the product document
-
             try {
-                // Call the sendStatusEmail function
-                const emailSent = await sendStatusEmail(context, userEmail, "temp");
-                console.log("Email sent", emailSent);
+                const user = await users.findOne({ _id: currentProduct.userId });
+
+                if (user && user.emails && user.emails[0] && user.emails[0].address) {
+                    const userEmail = user.emails[0].address;
+                    await sendStatusEmail(userEmail, "RFQ Updated Rejection Notice", "<p>Your RFQ has been rejected.</p>");
+                } else {
+                    throw new ReactionError("user-email-not-found", "User email not found.");
+                }
             } catch (error) {
-                console.error("Failed to send rejection email:", error.message);
+                throw new ReactionError("email-sending-failed", `Failed to send rejection email: ${error.message}`);
             }
         }
 
