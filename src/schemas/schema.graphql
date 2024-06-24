@@ -113,7 +113,11 @@ extend type Query {
     token: String
   ): [Refund]
 
-  getAllRFQ(shopId: ID, accountId: ID, status: RFQProductStatus): [RFQProduct]
+  getAllRFQ(
+    status: RFQProductStatus
+    itemPerPage: Int
+    PageNumber: Int
+  ): RFQProductPagination
 
   getRFQById(_id: ID!): getRFQById
 }
@@ -794,6 +798,13 @@ type RFQProduct {
   product: product
   createdAt: Date!
   updatedAt: Date!
+}
+
+type RFQProductPagination {
+  totalCount: Int!
+  currentPage: Int!
+  totalPages: Int!
+  RFQProducts: [RFQProduct]
 }
 
 type Price {
