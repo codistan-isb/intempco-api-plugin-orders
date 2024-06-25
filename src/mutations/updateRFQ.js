@@ -1,5 +1,5 @@
 import sendStatusEmail from "../util/emailService.js";
-import { decodeProductOpaqueId } from "../xforms/id.js";
+import { decodeProductOpaqueId, encodeCartOpaqueId } from "../xforms/id.js";
 import ReactionError from "@reactioncommerce/reaction-error";
 
 export default async function updateRFQProduct(context, input) {
@@ -69,7 +69,7 @@ export default async function updateRFQProduct(context, input) {
 
                 if (user && user.emails && user.emails[0] && user.emails[0].address) {
                     const userEmail = user.emails[0].address;
-                    await sendStatusEmail(userEmail, "RFQ Updated Acceped Notice", "<p>Your RFQ has been Accepted.</p>");
+                    await sendStatusEmail(userEmail, "RFQ Updated Acceped Notice", `<h1>Your RFQ has been Accepted.</h1><a href='${process.env.ROOT_URL+'/'+encodeCartOpaqueId(cartInfo?.cart?._id)}'>Click Here</a>`);
                 } else {
                     throw new ReactionError("user-email-not-found", "User email not found.");
                 }
