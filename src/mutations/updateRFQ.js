@@ -13,6 +13,7 @@ export default async function updateRFQProduct(context, input) {
 
     const currentProduct = await RFQProduct.findOne({ _id: decodeId });
 
+    console.log("currentProduct", currentProduct)
     if (!currentProduct) throw new ReactionError("not-found", "Product not found");
 
     if (status) {
@@ -21,6 +22,27 @@ export default async function updateRFQProduct(context, input) {
 
     currentProduct.updatedAt = new Date();
 
+    let cartInfo;
+    if(status === "approved") {
+        const items = [{
+            price: currentProduct?.price,
+            productConfiguration: {
+                productId: currentProduct?.prodId,
+                productVariantId: currentProduct?.variantId,
+            },
+            quantity: 1
+        }]
+        cartInfo = await context.mutations.createCart(context, {
+            items,
+            shopId: currentProduct?.shopId,
+            createRfq: true,
+            rfqId: currentProduct?._id
+        });
+        console.log("cartInfo", cartInfo)
+
+        currentProduct['cartId'] = cartInfo?.cart?._id
+    }
+
     const updatedRFQResp = await RFQProduct.findOneAndUpdate(
         { _id: decodeId },
         { $set: currentProduct },
@@ -28,9 +50,9 @@ export default async function updateRFQProduct(context, input) {
     );
 
     if (updatedRFQResp) {
+        const user = await users.findOne({ _id: currentProduct.userId });
         if (status === "rejected") {
             try {
-                const user = await users.findOne({ _id: currentProduct.userId });
 
                 if (user && user.emails && user.emails[0] && user.emails[0].address) {
                     const userEmail = user.emails[0].address;
@@ -41,6 +63,19 @@ export default async function updateRFQProduct(context, input) {
             } catch (error) {
                 throw new ReactionError("email-sending-failed", `Failed to send rejection email: ${error.message}`);
             }
+        } else  if(status === "approved") {
+            try {
+
+                if (user && user.emails && user.emails[0] && user.emails[0].address) {
+                    const userEmail = user.emails[0].address;
+                    await sendStatusEmail(userEmail, "RFQ Updated Acceped Notice", "<p>Your RFQ has been Accepted.</p>");
+                } else {
+                    throw new ReactionError("user-email-not-found", "User email not found.");
+                }
+            } catch (error) {
+                throw new ReactionError("email-sending-failed", `Failed to send rejection email: ${error.message}`);
+            }
+
         }
 
         return {
