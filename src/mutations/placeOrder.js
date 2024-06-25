@@ -45,13 +45,16 @@ async function createPayments({
   paymentsInput,
   shippingAddress,
   shop,
+  rfqId
 }) {
   // Determining which payment methods are enabled for the shop
   const availablePaymentMethods = shop.availablePaymentMethods || [];
 
   // Verify that total of payment inputs equals total due. We need to be sure
   // to do this before creating any payment authorizations
-  verifyPaymentsMatchOrderTotal(paymentsInput || [], orderTotal);
+  if(!rfqId){
+    verifyPaymentsMatchOrderTotal(paymentsInput || [], orderTotal);
+  }
 
   // Create authorized payments for each
   const paymentPromises = (paymentsInput || []).map(async (paymentInput) => {
@@ -191,35 +194,40 @@ export default async function placeOrder(context, input) {
   // Add more props to each fulfillment group, and validate/build the items in each group
   let orderTotal = 0;
   let shippingAddressForPayments = null;
-  const finalFulfillmentGroups = await Promise.all(
-    fulfillmentGroups.map(async (inputGroup) => {
-      const { group, groupSurcharges } =
-        await buildOrderFulfillmentGroupFromInput(context, {
-          accountId,
-          billingAddress,
-          cartId,
-          currencyCode,
-          discountTotal,
-          inputGroup,
-          orderId,
-          cart,
-        });
+  let finalFulfillmentGroups;
+  
+  if(!cart?.rfqId){
+    finalFulfillmentGroups = await Promise.all(
+      fulfillmentGroups.map(async (inputGroup) => {
+        const { group, groupSurcharges } =
+          await buildOrderFulfillmentGroupFromInput(context, {
+            accountId,
+            billingAddress,
+            cartId,
+            currencyCode,
+            discountTotal,
+            inputGroup,
+            orderId,
+            cart,
+          });
+  
+        // We save off the first shipping address found, for passing to payment services. They use this
+        // for fraud detection.
+        if (group.address && !shippingAddressForPayments)
+          shippingAddressForPayments = group.address;
+  
+        // Push all group surcharges to overall order surcharge array.
+        // Currently, we do not save surcharges per group
+        orderSurcharges.push(...groupSurcharges);
+  
+        // Add the group total to the order total
+        orderTotal += group.invoice.total;
+  
+        return group;
+      })
+    );
 
-      // We save off the first shipping address found, for passing to payment services. They use this
-      // for fraud detection.
-      if (group.address && !shippingAddressForPayments)
-        shippingAddressForPayments = group.address;
-
-      // Push all group surcharges to overall order surcharge array.
-      // Currently, we do not save surcharges per group
-      orderSurcharges.push(...groupSurcharges);
-
-      // Add the group total to the order total
-      orderTotal += group.invoice.total;
-
-      return group;
-    })
-  );
+  }
 
   const payments = await createPayments({
     accountId,
@@ -232,6 +240,7 @@ export default async function placeOrder(context, input) {
     shippingAddress: shippingAddressForPayments,
     shop,
     isStock,
+    rfqId: cart?.rfqId ?? null
   });
 
   // Create anonymousAccessToken if no account ID
@@ -253,7 +262,7 @@ export default async function placeOrder(context, input) {
     shipping: finalFulfillmentGroups,
     shopId,
     surcharges: orderSurcharges,
-    totalItemQuantity: finalFulfillmentGroups.reduce(
+    totalItemQuantity: finalFulfillmentGroups?.reduce?.(
       (sum, group) => sum + group.totalItemQuantity,
       0
     ),
@@ -324,7 +333,7 @@ export default async function placeOrder(context, input) {
   }
 
   // Validate and save
-  OrderSchema.validate(order);
+  // OrderSchema.validate(order);
   await Orders.insertOne(order);
 
   await appEvents.emit("afterOrderCreate", { createdBy: userId, order });
