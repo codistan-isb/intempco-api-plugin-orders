@@ -36,7 +36,8 @@ export default async function updateRFQProduct(context, input) {
             items,
             shopId: currentProduct?.shopId,
             createRfq: true,
-            rfqId: currentProduct?._id
+            rfqId: currentProduct?._id,
+            userId: currentProduct?.userId
         });
         console.log("cartInfo", cartInfo)
 
