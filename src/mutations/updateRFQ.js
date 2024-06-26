@@ -13,7 +13,7 @@ export default async function updateRFQProduct(context, input) {
 
     const currentProduct = await RFQProduct.findOne({ _id: decodeId });
 
-    console.log("currentProduct", currentProduct)
+    console.log("currentProduct", currentProduct);
     if (!currentProduct) throw new ReactionError("not-found", "Product not found");
 
     if (status) {
@@ -23,7 +23,7 @@ export default async function updateRFQProduct(context, input) {
     currentProduct.updatedAt = new Date();
 
     let cartInfo;
-    if(status === "approved") {
+    if (status === "approved") {
         const items = [{
             price: currentProduct?.price,
             productConfiguration: {
@@ -31,7 +31,7 @@ export default async function updateRFQProduct(context, input) {
                 productVariantId: currentProduct?.variantId,
             },
             quantity: 1
-        }]
+        }];
         cartInfo = await context.mutations.createCart(context, {
             items,
             shopId: currentProduct?.shopId,
@@ -39,9 +39,9 @@ export default async function updateRFQProduct(context, input) {
             rfqId: currentProduct?._id,
             userId: currentProduct?.userId
         });
-        console.log("cartInfo", cartInfo)
+        console.log("cartInfo", cartInfo);
 
-        currentProduct['cartId'] = cartInfo?.cart?._id
+        currentProduct['cartId'] = cartInfo?.cart?._id;
     }
 
     const updatedRFQResp = await RFQProduct.findOneAndUpdate(
@@ -64,12 +64,12 @@ export default async function updateRFQProduct(context, input) {
             } catch (error) {
                 throw new ReactionError("email-sending-failed", `Failed to send rejection email: ${error.message}`);
             }
-        } else  if(status === "approved") {
+        } else if (status === "approved") {
             try {
 
                 if (user && user.emails && user.emails[0] && user.emails[0].address) {
                     const userEmail = user.emails[0].address;
-                    await sendStatusEmail(userEmail, "RFQ Updated Acceped Notice", `<h1>Your RFQ has been Accepted.</h1><a href='${process.env.ROOT_URL+'/'+encodeCartOpaqueId(cartInfo?.cart?._id)}'>Click Here</a>`);
+                    await sendStatusEmail(userEmail, "RFQ Updated Acceped Notice", `<h1>Your RFQ has been Accepted.</h1><a href='${process.env.CART_URL + '/' + encodeCartOpaqueId(cartInfo?.cart?._id)}'>Click Here</a>`);
                 } else {
                     throw new ReactionError("user-email-not-found", "User email not found.");
                 }
