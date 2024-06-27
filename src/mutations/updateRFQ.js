@@ -7,7 +7,7 @@ export default async function updateRFQProduct(context, input) {
     const { collections } = context;
     const { RFQProduct, users } = collections;
 
-    let { _id, status } = input;
+    let { _id, status, reason = null } = input;
 
     const decodeId = decodeProductOpaqueId(_id);
 
@@ -18,6 +18,7 @@ export default async function updateRFQProduct(context, input) {
 
     if (status) {
         currentProduct.status = status;
+        currentProduct.reason = reason;
     }
 
     currentProduct.updatedAt = new Date();

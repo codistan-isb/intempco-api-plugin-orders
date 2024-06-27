@@ -26,6 +26,7 @@ export default async function getRFQById(context, args) {
                 ...responseRFQ,
                 product: product || null
             },
+            reason: responseRFQ?.reason
         };
     } else {
         return {

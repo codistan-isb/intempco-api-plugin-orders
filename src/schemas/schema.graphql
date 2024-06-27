@@ -782,6 +782,7 @@ input PriceInput {
 input UpdateRFQProductInput {
   _id: ID!
   status: RFQProductStatus
+  reason: String
 }
 
 type RFQProduct {
@@ -834,6 +835,7 @@ type getRFQById {
   status: String
   message: String
   getRFQById: RFQProduct
+  reason: String
 }
 
 type UpdatedRFQProduct {
