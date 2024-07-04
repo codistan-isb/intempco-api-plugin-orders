@@ -1,6 +1,8 @@
 import sendStatusEmail from "../util/emailService.js";
 import { decodeProductOpaqueId, encodeCartOpaqueId } from "../xforms/id.js";
 import ReactionError from "@reactioncommerce/reaction-error";
+import rejectRequest from "../templates/rejectRequest.js";
+import approvedRequest from "../templates/approvedRequest.js";
 
 export default async function updateRFQProduct(context, input) {
     console.log("input:- ", input);
@@ -58,7 +60,12 @@ export default async function updateRFQProduct(context, input) {
 
                 if (user && user.emails && user.emails[0] && user.emails[0].address) {
                     const userEmail = user.emails[0].address;
-                    await sendStatusEmail(userEmail, "RFQ Updated Rejection Notice", "<p>Your RFQ has been rejected.</p>");
+                    const templateContext = {
+                        emailLogo: 'logo-url',
+                        isRejected: true,
+                        reason: reason || 'No reason provided'
+                    };
+                    await sendStatusEmail(userEmail, "RFQ Updated Rejection Notice", rejectRequest, templateContext);
                 } else {
                     throw new ReactionError("user-email-not-found", "User email not found.");
                 }
@@ -70,7 +77,15 @@ export default async function updateRFQProduct(context, input) {
 
                 if (user && user.emails && user.emails[0] && user.emails[0].address) {
                     const userEmail = user.emails[0].address;
-                    await sendStatusEmail(userEmail, "RFQ Updated Acceped Notice", `<h1>Your RFQ has been Accepted.</h1><a href='${process.env.CART_URL + '/' + encodeCartOpaqueId(cartInfo?.cart?._id)}'>Click Here</a>`);
+                    
+                    // Determine the URL to use
+                    const cartBaseUrl = process.env.LOCAL_CART_URL || process.env.CART_URL;
+                    const cartUrl = `${cartBaseUrl}/${encodeCartOpaqueId(cartInfo?.cart?._id)}`;
+                    
+                    const templateContext = {
+                        cartUrl
+                    };
+                    await sendStatusEmail(userEmail, "RFQ Updated Approval Notice", approvedRequest, templateContext);
                 } else {
                     throw new ReactionError("user-email-not-found", "User email not found.");
                 }

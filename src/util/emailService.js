@@ -1,12 +1,8 @@
 import nodemailer from 'nodemailer';
+import Handlebars from 'handlebars';
 
-export default async function sendEmail(email, subject, html) {
+export default async function sendEmail(email, subject, template, context) {
     try {
-
-        console.log("HOST", process.env.MAIL_HOST);
-        console.log("PORT", process.env.MAIL_HOST_PORT);
-        console.log("USER", process.env.MAIL_USER);
-        console.log("PASS", process.env.MAIL_PASSWORD);
         const transporter = nodemailer.createTransport({
             host: process.env.MAIL_HOST,
             port: process.env.MAIL_HOST_PORT,
@@ -16,6 +12,9 @@ export default async function sendEmail(email, subject, html) {
             },
         });
 
+        const compiledTemplate = Handlebars.compile(template);
+        const html = compiledTemplate(context);
+
         const mailOptions = {
             from: process.env.MAIL_USER,
             to: email,
@@ -24,11 +23,8 @@ export default async function sendEmail(email, subject, html) {
             html: html,
         };
 
-        console.log("MAIL OPTION ", mailOptions);
-
         const info = await transporter.sendMail(mailOptions);
         console.log('Message sent: %s', info.messageId);
-        console.log("INFOE", info);
         return true;
     } catch (error) {
         console.error('Failed to send email:', error.message);
