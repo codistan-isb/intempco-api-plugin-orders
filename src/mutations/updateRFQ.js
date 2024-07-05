@@ -79,7 +79,8 @@ export default async function updateRFQProduct(context, input) {
                     const userEmail = user.emails[0].address;
                     
                     // Determine the URL to use
-                    const cartBaseUrl = process.env.LOCAL_CART_URL || process.env.CART_URL;
+                    const cartBaseUrl =  process.env.CART_URL;
+                    console.log("BASE URL ", cartBaseUrl)
                     const cartUrl = `${cartBaseUrl}/${encodeCartOpaqueId(cartInfo?.cart?._id)}`;
                     
                     const templateContext = {
